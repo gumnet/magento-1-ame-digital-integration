@@ -122,6 +122,7 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
         $json_array['attributes']['customPayload']['shippingAddress']['state'] = $this->codigoUF($order->getShippingAddress()->getRegion());
 
         $json_array['attributes']['customPayload']['billingAddress'] = $json_array['attributes']['customPayload']['shippingAddress'];
+        $json_array['attributes']['customPayload']['isFrom'] = "MAGENTO";
         $json_array['attributes']['paymentOnce'] = true;
         $json_array['attributes']['riskHubProvider'] = "SYNC";
         $json_array['attributes']['origin'] = "ECOMMERCE";
