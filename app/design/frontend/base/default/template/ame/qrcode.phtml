@@ -1,0 +1,106 @@
+<?php
+echo "";
+if($this->getPaymentMethod()=="ame") {
+    $total_discount = 0;
+    $items = $this->getOrder()->getAllItems();
+    foreach ($items as $item) {
+        $total_discount = $total_discount + $item->getDiscountAmount();
+    }
+    ?>
+    <style>
+        #success_ame_external {
+            display: block;
+            background-color: rgb(244, 244, 244);
+            top: 20%;
+            left: 20%;
+            height: 60%;
+            width: 100%;
+            text-align: center;
+            z-index: 999;
+            margin: 0 auto;
+        }
+        #success_ame_internal{
+            top:10%;
+            width:300px;
+            background-color:#ffffff;
+            text-align:center;
+        }
+        #success_ame_internal img{
+            display:initial;
+        }
+        #success_ame_value_txt{
+            font-weight: bold;
+            font-size: 11px;
+            font-family: Ubuntu, Ubuntu-Medium, Arial !important;
+            line-height: 1.5;
+
+        }
+        #success_ame_value{
+            font-weight: 600;
+            color: #fb3654;
+            font-family: Ubuntu, Ubuntu-Medium, Arial !important;
+        }
+        #success_ame_cashback_txt{
+            font-size: 12px;
+            margin-bottom: 0;
+        }
+        #success_ame_cashback_value{
+            font-weight: 600;
+            color: #4a90e2;
+            display: inline;
+        }
+        #success_ame_facil{
+            color: #ee345e;
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: .5rem;
+        }
+        #success_ame_qrcode{
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #212529;
+            margin: 0 auto;
+        }
+        #success_ame_info{
+            color: #aaaaaa;
+            font-size: 12px;
+        }
+
+    </style>
+    <div id='success_ame_external'>
+        <center>
+        <div id='success_ame_internal'>
+            &nbsp;<br>
+            <div id="success_ame_value_txt">
+                <img src="<?php echo $this->getSkinUrl('images/ame/ame-digital.png'); ?>" alt='AME' width="150">
+               <br><br>
+                Valor da compra:
+            </div>
+            <div id="success_ame_value">R$<?php echo number_format($this->getPrice()-abs($total_discount),
+                    2,",","."); ?></div><br>
+            <div id="success_ame_cashback_txt">Receba de volta <div id="success_ame_cashback_value">
+                    <?php echo number_format($this->getCashbackValue(),2,",","."); ?></div> em até 30 dias.</div><br>
+            <div id="success_ame_facil">Pagar com a AME é fácil e rápido!</div>
+            <img id="success_ame_qrcode" src='<?php echo $this->getQrCodeLink(); ?>'/>
+            <div id="success_ame_info">1. Abra o aplicativo Ame Digital. Se você ainda não tem, <br>baixe no
+                <img src="<?php echo $this->getSkinUrl('images/ame/google-logo.svg', array('_secure'=>true)); ?>" alt='Google Play' height="16">
+                ou na
+                <img src="<?php echo $this->getSkinUrl('images/ame/apple-logo.svg', array('_secure'=>true)); ?>" alt='App Store' height="16"><br>
+                2. Clique em pagar
+                <img src="<?php echo $this->getSkinUrl('images/ame/ame-small-logo.svg');?>" alt='AME Logo'>
+                e aponte para o QR Code.<br>
+                3. Pronto, agora é só finalizar o pagamento com Ame.<br>
+                <br>
+                Quer saber mais sobre a Ame? <a href="https://www.amedigital.com/" target="_blank">Clique aqui</a>.
+            </div><br>&nbsp;
+        </div>
+        </center>
+        <script>
+            if(window.innerWidth<=500){
+                window.location = "<?php echo $this->getDeepLink();?>";
+            }
+        </script>
+    </div>
+    <?php
+}

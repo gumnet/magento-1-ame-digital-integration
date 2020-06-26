@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <checkout_onepage_success>
+        <reference name="content">
+            <block type="amepayment/onepage_success" name="ame_qrcode" after="-"  template="ame/qrcode.phtml" />
+        </reference>
+    </checkout_onepage_success>
+    <catalog_category_default>
+        <reference name="product_list">
+            <block type="amepayment/cashback" name="cashback" as="cashback" template="ame/cashback.phtml" />
+        </reference>
+    </catalog_category_default>
+</layout>

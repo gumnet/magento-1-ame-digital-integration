@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <ame translate="label" module="amepayment">
+            <label>AME Digital</label>
+            <sort_order>1000</sort_order>
+        </ame>
+    </tabs>
+    <sections>
+        <ame translate="label" module="amepayment">
+        <class>separator-top</class>
+        <label>Configurations</label>
+        <tab>ame</tab>
+        <frontend_type>text</frontend_type>
+        <sort_order>300</sort_order>
+        <show_in_default>1</show_in_default>
+        <show_in_website>1</show_in_website>
+        <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label">
+                    <label>General</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                        <fields>
+                            <environment translate="label comment">
+                                <label>Environment</label>
+                                <frontend_type>select</frontend_type>
+                                <source_model>amepayment/system_config_source_environment</source_model>
+                                <show_in_default>1</show_in_default>
+                                <show_in_website>1</show_in_website>
+                                <show_in_store>1</show_in_store>
+                            </environment>
+                            <api_user translate="label comment">
+                                <label>Api User</label>
+                                <frontend_type>text</frontend_type>
+                                <show_in_default>1</show_in_default>
+                                <show_in_website>1</show_in_website>
+                                <show_in_store>1</show_in_store>>
+                                <backend_model>amepayment/Apiuser</backend_model>
+                            </api_user>
+                            <api_password translate="label comment">
+                                <label>Api Password</label>
+                                <frontend_type>text</frontend_type>
+                                <show_in_default>1</show_in_default>
+                                <show_in_website>1</show_in_website>
+                                <show_in_store>1</show_in_store>
+                                <backend_model>amepayment/Apipassword</backend_model>
+                            </api_password>
+                            <cashback_value translate="label comment">
+                                <label>Cashback %</label>
+                                <frontend_type>text</frontend_type>
+                                <show_in_default>1</show_in_default>
+                                <show_in_website>1</show_in_website>
+                                <show_in_store>1</show_in_store>
+                                <backend_model>amepayment/Cashback</backend_model>
+                            </cashback_value>
+                        </fields>
+                </general>
+                <address translate="label">
+                    <label>Address</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <street translate="label comment">
+                            <label>Rua</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>amepayment/system_config_source_addresslines</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </street>
+                        <number translate="label comment">
+                            <label>Número</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>amepayment/system_config_source_addresslines</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </number>
+                        <neighborhood translate="label comment">
+                            <label>Bairro</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>amepayment/system_config_source_addresslines</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </neighborhood>
+                    </fields>
+                </address>
+                <debug translate="label">
+                    <label>Debug</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <debug_log translate="label comment">
+                            <label>Habilitar Debug Log</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </debug_log>
+                        <debug_email_enable translate="label comment">
+                            <label>Enviar Emails de Debug</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </debug_email_enable>
+                        <debug_email_addresses translate="label comment">
+                            <label>Enviar emails de debug para:</label>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </debug_email_addresses>
+                    </fields>
+                </debug>
+            </groups>
+        </ame>
+        <payment>
+            <groups>
+                <amepayment translate="label" module="amepayment">
+                    <label>AME</label>
+                    <sort_order>900</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <sort_order>2</sort_order>
+                        </active>
+                        <order_status translate="label">
+                            <label>New order status</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <sort_order>3</sort_order>
+                        </order_status>
+                        <allowspecific translate="label">
+                            <label>Payment from applicable countries</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>4</sort_order>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Payment from Specific countries</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>5</sort_order>
+                        </specificcountry>
+                    </fields>
+                </amepayment>
+            </groups>
+        </payment>
+    </sections>
+</config>
