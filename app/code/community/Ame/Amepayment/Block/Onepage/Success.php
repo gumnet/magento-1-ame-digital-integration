@@ -30,12 +30,12 @@
 class Ame_Amepayment_Block_Onepage_Success extends Mage_Checkout_Block_Onepage_Success
 {
     public function getCashbackValue(){
-        $total_discount = 0;
-        $items = $this->getOrder()->getAllItems();
-        foreach ($items as $item) {
-            $total_discount = $total_discount + $item->getDiscountAmount();
-        }
-        return ($this->getPrice()-abs($total_discount)) * $this->getCashbackPercent() * 0.01;
+        $increment_id = $this->getOrder()->getIncrementId();
+        $sql = "SELECT cashback_amount FROM ame_order WHERE increment_id = ".$increment_id;
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
+        $value = $readConnection->fetchOne($sql);
+        return $value * 0.01;
     }
 
     public function getCashbackPercent(){

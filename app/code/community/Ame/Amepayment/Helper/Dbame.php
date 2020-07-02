@@ -75,11 +75,17 @@ class Ame_Amepayment_Helper_Dbame extends Mage_Core_Helper_Abstract{
     }
 
     public function insertOrder($order,$result_array){
+        if(array_key_exists('cashbackAmountValue',$result_array['attributes'])){
+            $cashbackAmountValue = $result_array['attributes']['cashbackAmountValue'];
+        }
+        else{
+            $cashbackAmountValue = 0;
+        }
         $sql = "INSERT INTO ame_order (increment_id,ame_id,amount,cashback_amount,
                        qr_code_link,deep_link)
                 VALUES (" . $order->getIncrementId() . ",'" . $result_array['id'] . "',
                         " . $result_array['amount'] . ",
-                        0,
+                        ".$cashbackAmountValue.",
                         '" . $result_array['qrCodeLink'] . "',
                         '" . $result_array['deepLink'] . "')";
         $resourceDb = $this->getWriteDB();
