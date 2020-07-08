@@ -78,6 +78,9 @@ class Ame_Amepayment_IndexController extends Mage_Core_Controller_Front_Action
             $ame_transaction_id = $helperDbame->getTransactionIdByOrderId($ame_order_id);
             $amount = $helperDbame->getTransactionAmount($ame_transaction_id);
             $helperGumapi->captureTransaction($ame_transaction_id,$ame_order_id,$amount);
+            $order->setState(Mage_Sales_Model_Order::STATE_NEW, true);
+            $order->setStatus("pending");
+            $order->save();
         }
         elseif($input['status']=="AUTHORIZED" && $environment == '1') {
             Mage::log("INFO","AME Callback recording transaction for ".$ame_order_id);

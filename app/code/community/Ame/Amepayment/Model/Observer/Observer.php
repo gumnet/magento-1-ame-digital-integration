@@ -43,6 +43,9 @@ class Ame_Amepayment_Model_Observer_Observer
             $helper = Mage::helper('amepayment/Api');
             $helper->createOrder($order);
         }
+        $order->setState(Mage_Sales_Model_Order::STATE_NEW, true);
+        $order->setStatus("pgto_transferencia");
+        $order->save();
         return $this;
     }
 
