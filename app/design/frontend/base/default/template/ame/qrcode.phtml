@@ -14,10 +14,11 @@ if($this->getPaymentMethod()=="ame") {
             top: 20%;
             left: 20%;
             height: 60%;
-            width: 100%;
+            width: 60%;
             text-align: center;
             z-index: 999;
             margin: 0 auto;
+            position: fixed;
         }
         #success_ame_internal{
             top:10%;
@@ -106,8 +107,11 @@ if($this->getPaymentMethod()=="ame") {
             var updatePaymentLoop = setInterval(updatePaymentConfirmation,3000);
 
             function paymentConfirmed(){
-                jQuery('#success_ame_external').remove();
-                jQuery('.main').text("Recebemos seu pagamento. Aguarde atualizações em seu email cadastrado. Muito obrigado pela compra!");
+                var msgPagamentoConfirmado = "<br><br><br>Recebemos seu pagamento.<br><br>Muito obrigado pela compra!<br><br>Enviaremos atualizações para seu email cadastrado.<br><br><br>";
+                jQuery('#success_ame_info').remove();
+                jQuery('#success_ame_qrcode').remove();
+                jQuery('#success_ame_facil').remove();
+                jQuery('#success_ame_cashback_txt').html(jQuery('#success_ame_cashback_txt').html() + msgPagamentoConfirmado);
             }
             function updatePaymentConfirmation()
             {
