@@ -2,7 +2,7 @@
 /**
  * @author Gustavo Ulyssea - gustavo.ulyssea@gmail.com
  * @copyright Copyright (c) 2020 GumNet (https://gum.net.br)
- * @package GumNet AME Magento 1.9
+ * @package GumNet AME
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,27 +27,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-class Ame_Amepayment_Helper_Mailerame extends Mage_Core_Helper_Abstract
-{
-    public function sendDebug($subject,$message){
-        $storeid = Mage::app()->getStore()->getStoreId();
-        if(!Mage::getStoreConfig('ame/debug/debug_email_addresses', $storeid)) return;
+namespace GumNet\AME\Observer;
 
-        $emails = Mage::getStoreConfig('ame/debug/debug_email_addresses', $storeid);
-        $emails_array = explode(",",$emails);
-        foreach($emails_array as $email){
-            if (\Zend_Validate::is(trim($email), 'EmailAddress')) {
-                $this->mailSender(trim($email),$subject,$message);
-            }
-        }
-    }
-    public function mailSender($to,$subject,$message)
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\App\ObjectManager;
+
+class ObserverforDisabledFrontendPg implements ObserverInterface
+{
+    protected $_appState;
+
+    public function __construct(
+        \Magento\Framework\App\State $appState
+    )
     {
-        $from = Mage::getStoreConfig('trans_email/ident_general/email');
-        $headers = "From: ".$from."\r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-        mail($to,$subject,$message,$headers);
-        return true;
+        $this->_appState = $appState;
+    }
+
+    public function execute(\Magento\Framework\Event\Observer $observer)
+    {
+//        $result = $observer->getEvent()->getResult();
+//        $method_instance = $observer->getEvent()->getMethodInstance();
+//        $quote = $observer->getEvent()->getQuote();
+//        if ($method_instance->getCode() == 'ame' &&
+//            in_array($this->_appState->getAreaCode(), $this->getDisableAreas())) {
+//            $result->setData('is_available', false);
+//        }
+    }
+    protected function getDisableAreas()
+    {
+        return array(\Magento\Framework\App\Area::AREA_FRONTEND, \Magento\Framework\App\Area::AREA_WEBAPI_REST);
     }
 }

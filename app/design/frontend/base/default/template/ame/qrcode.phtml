@@ -12,9 +12,8 @@ if($this->getPaymentMethod()=="ame") {
             display: block;
             background-color: rgb(244, 244, 244);
             top: 20%;
-            left: 20%;
-            height: 60%;
-            width: 60%;
+            left: 0;
+            width: 100%;
             text-align: center;
             z-index: 999;
             margin: 0 auto;
@@ -111,7 +110,7 @@ if($this->getPaymentMethod()=="ame") {
                 jQuery('#success_ame_info').remove();
                 jQuery('#success_ame_qrcode').remove();
                 jQuery('#success_ame_facil').remove();
-                jQuery('#success_ame_cashback_txt').html(jQuery('#success_ame_cashback_txt').html() + msgPagamentoConfirmado);
+                jQuery('#success_ame_cashback_txt').html(msgPagamentoConfirmado);
             }
             function updatePaymentConfirmation()
             {
