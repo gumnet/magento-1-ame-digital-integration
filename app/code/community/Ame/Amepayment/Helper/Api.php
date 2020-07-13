@@ -51,6 +51,7 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
         $json_array['amount'] = $amount * 100;
         $json = json_encode($json_array);
         $request = $this->ameRequest($url, "PUT", $json);
+
         if ($this->hasError($request, $url, $json)) return false;
         $result[0] = json_decode($request,true);
         $result[1] = $refund_id;
@@ -101,13 +102,12 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
         $shippingAmount = $order->getShippingAmount();
         $productsAmount = $order->getGrandTotal() - $shippingAmount;
         $amount = intval($order->getGrandTotal() * 100);
-        $cashbackAmountValue = intval($this->getCashbackPercent() * $amount * 0.01);
+//        $cashbackAmountValue = intval($this->getCashbackPercent() * $amount * 0.01);
 
         $json_array['title'] = "GumNet Pedido " . $order->getIncrementId();
         $json_array['description'] = "Pedido " . $order->getIncrementId();
         $json_array['amount'] = $amount;
         $json_array['currency'] = "BRL";
-        $json_array['attributes']['cashbackamountvalue'] = $cashbackAmountValue;
         $json_array['attributes']['transactionChangedCallbackUrl'] = $this->getCallbackUrl();
         $json_array['attributes']['items'] = [];
 
@@ -123,12 +123,12 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
             $total_discount = $total_discount + abs($item->getDiscountAmount());
             array_push($json_array['attributes']['items'], $array_items);
         }
-        if($total_discount){
+//        if($total_discount){
 //            $amount = intval($products_amount + $shippingAmount * 100);
 //            $json_array['amount'] = $amount;
-            $cashbackAmountValue = intval($this->getCashbackPercent() * $products_amount * 0.01);
-            $json_array['attributes']['cashbackamountvalue'] = $cashbackAmountValue;
-        }
+//            $cashbackAmountValue = intval($this->getCashbackPercent() * $products_amount * 0.01);
+//            $json_array['attributes']['cashbackamountvalue'] = $cashbackAmountValue;
+//        }
 
         $json_array['attributes']['customPayload']['ShippingValue'] = intval($order->getShippingAmount() * 100);
         $json_array['attributes']['customPayload']['shippingAddress']['country'] = "BRA";
@@ -156,11 +156,10 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
 
         $json = json_encode($json_array);
         $result = $this->ameRequest($url, "POST", $json);
-
+        Mage::log($result."||".$url . "||".$json);
         if ($this->hasError($result, $url, $json)) return false;
         $gumapi = Mage::helper('amepayment/Gumapi');
         $gumapi->createOrder($json,$result);
-        Mage::log($result . $url . $json);
         $result_array = json_decode($result, true);
         $dbame = Mage::helper('amepayment/Dbame');
         $dbame->insertOrder($order,$result_array);
@@ -192,11 +191,11 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
         }
         return false;
     }
-    public function getCashbackPercent()
-    {
-        $storeid = Mage::app()->getStore()->getStoreId();
-        return Mage::getStoreConfig('ame/general/cashback_value', $storeid);
-    }
+//    public function getCashbackPercent()
+//    {
+//        $storeid = Mage::app()->getStore()->getStoreId();
+//        return Mage::getStoreConfig('ame/general/cashback_value', $storeid);
+//    }
     public function getStoreName()
     {
         $storeid = Mage::app()->getStore()->getStoreId();
@@ -224,6 +223,8 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
         }
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         $result = curl_exec($ch);
+        $loggerame = Mage::helper('amepayment/Loggerame');
+        $loggerame->log($result,"info",$url,$json);
         Mage::log("ameRequest OUTPUT:" . $result);
         Mage::log(curl_getinfo($ch, CURLINFO_HTTP_CODE) . "header" . $url . $json);
         Mage::log($result . "info" . $url . $json);

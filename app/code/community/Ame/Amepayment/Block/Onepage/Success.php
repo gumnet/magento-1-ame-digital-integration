@@ -37,12 +37,10 @@ class Ame_Amepayment_Block_Onepage_Success extends Mage_Checkout_Block_Onepage_S
         $value = $readConnection->fetchOne($sql);
         return $value * 0.01;
     }
-
-    public function getCashbackPercent(){
-        $helper = Mage::helper('amepayment/Api');
-        return $helper->getCashbackPercent();
-    }
-
+//    public function getCashbackPercent(){
+//        $helper = Mage::helper('amepayment/Api');
+//        return $helper->getCashbackPercent();
+//    }
     public function getPrice(){
         return $this->getOrder()->getGrandTotal();
     }
