@@ -32,7 +32,7 @@
 <config>
     <modules>
         <Ame_Amepayment>
-            <version>1.0.0.0</version>
+            <version>1.0.1.0</version>
         </Ame_Amepayment>
     </modules>
     <global>

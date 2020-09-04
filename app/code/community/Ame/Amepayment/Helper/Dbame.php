@@ -39,6 +39,23 @@ class Ame_Amepayment_Helper_Dbame extends Mage_Core_Helper_Abstract{
         return $resource->getConnection('core_write');
     }
 
+    public function setCashbackPercent($cashback_percent){
+        $sql = "UPDATE ame_config SET ame_value = '".$cashback_percent."' WHERE ame_option = 'cashback_percent'";
+        $resourceDb = $this->getWriteDB();
+        $resourceDb->query($sql);
+        $sql = "UPDATE ame_config SET ame_value = '".time()."' WHERE ame_option = 'cashback_updated_at'";
+        $resourceDb->query($sql);
+    }
+    public function getCashbackUpdatedAt(){
+        $sql = "SELECT ame_value FROM ame_config WHERE ame_option = 'cashback_updated_at'";
+        $resourceDb = $this->getReadDB();
+        return $resourceDb->fetchOne($sql);
+    }
+    public function getCashbackPercent(){
+        $sql = "SELECT ame_value FROM ame_config WHERE ame_option = 'cashback_percent'";
+        $resourceDb = $this->getReadDB();
+        return $resourceDb->fetchOne($sql);
+    }
     public function insertRefund($ame_order_id,$refund_id,$operation_id,$amount,$status){
         $transaction_id = $this->getTransactionIdByOrderId($ame_order_id);
         $sql = "INSERT INTO ame_refund (ame_transaction_id,refund_id,operation_id,amount,status,created_at,refunded_at)
@@ -129,7 +146,10 @@ class Ame_Amepayment_Helper_Dbame extends Mage_Core_Helper_Abstract{
         $splits = $transaction_array['splits'];
         $array_keys = array('id','date','amount','status','cashType');
         foreach($splits as $split) {
-            $sql = file_get_contents(__DIR__ . "/SQL/inserttransactionsplit.sql");
+            $sql = "INSERT INTO ame_transaction_split (ame_transaction_id,ame_transaction_split_id,
+                    ame_transaction_split_date,amount,status,cash_type,others)
+                    VALUES ('[AME_TRANSACTION_ID]','[AME_TRANSACTION_SPLIT_ID]',
+                    '[AME_TRANSACTION_SPLIT_DATE]',[AMOUNT],'[STATUS]','[CASH_TYPE]','[OTHERS]')";
             if(array_key_exists('id',$transaction_array)) {
                 $sql = str_replace('[AME_TRANSACTION_ID]', $transaction_array['id'], $sql);
             }
@@ -163,7 +183,8 @@ class Ame_Amepayment_Helper_Dbame extends Mage_Core_Helper_Abstract{
     }
 
     public function insertTransaction($transaction_array){
-        $sql = file_get_contents(__DIR__ . "/SQL/inserttransaction.sql");
+        $sql = "INSERT INTO ame_transaction (ame_order_id,ame_transaction_id,amount,status,operation_type)
+                VALUES ('[AME_ORDER_ID]','[AME_TRANSACTION_ID]',[AMOUNT],'[STATUS]','[OPERATION_TYPE]')";
         $sql = str_replace('[AME_ORDER_ID]',$transaction_array['attributes']['orderId'],$sql);
         $sql = str_replace('[AME_TRANSACTION_ID]',$transaction_array['id'],$sql);
         $sql = str_replace('[AMOUNT]',$transaction_array['amount'],$sql);
@@ -182,7 +203,9 @@ class Ame_Amepayment_Helper_Dbame extends Mage_Core_Helper_Abstract{
     }
 
     public function getFirstPendingTransactions($num){
-        $sql = file_get_contents("SQL/getfirstpendingtransactions.sql");
+        $sql = "SELECT * FROM ame_transaction
+                WHERE WHERE update_ok = 0 ORDER BY ao.updated_at
+                LIMIT [LIMIT]";
         $sql = str_replace("[LIMIT]",$num,$sql);
         $resourceDb = $this->getReadDB();
         return $resourceDb->fetchAssoc($sql);
