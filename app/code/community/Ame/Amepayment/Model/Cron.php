@@ -36,15 +36,16 @@ class Ame_Amepayment_Model_Cron
         $orderCollection =  Mage::getModel('sales/order_payment')->getCollection()->addFieldToFilter('method',"ame")->addFieldToFilter('status',"pending");
         $orderCollection->getSelect()->join($order_table,$on_condition);
         foreach ($orderCollection as $order){
+            $order1 = Mage::getModel('sales/order')->load($order->getId());
             $helperApi = Mage::helper('amepayment/Api');
             $helperDbame = Mage::helper('amepayment/Dbame');
             $helperGumapi = Mage::helper('amepayment/Gumapi');
             $capture = $helperApi->captureOrder($helperDbame->getAmeIdByIncrementId($order->getIncrementId()));
             if(!$capture){
-                $order->addStatusHistoryComment('AME Cron Capture Fail');
+                $order1->addStatusHistoryComment('AME Cron Capture Fail');
             }else{
-                $this->invoiceOrder($order);
-                $ame_order_id = $helperDbame->getAmeIdByIncrementId($order->getIncrementId());
+                $this->invoiceOrder($order1);
+                $ame_order_id = $helperDbame->getAmeIdByIncrementId($order1->getIncrementId());
                 Mage::log("INFO", "AME Cron capturing...");
                 $ame_transaction_id = $helperDbame->getTransactionIdByOrderId($ame_order_id);
                 $amount = $helperDbame->getTransactionAmount($ame_transaction_id);
