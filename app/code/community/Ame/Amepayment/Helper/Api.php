@@ -35,7 +35,7 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
             return "https://api.hml.amedigital.com/api";
         }
         if (Mage::getStoreConfig('ame/general/environment', $storeid) == 2) {
-            return "https://api.amedigital.com/api";
+            return "https://ame19gwci.gum.net.br:63333/api";
         }
     }
 
