@@ -44,6 +44,35 @@ class Ame_Amepayment_Helper_Gumapi extends Mage_Core_Helper_Abstract
         $this->gumRequest("createorder",$result,$input);
         return true;
     }
+    public function queueTransaction($json)
+    {
+        $this->apiGumCallback("/api/ame/transaction/","POST",$json);
+    }
+    public function apiGumCallback($url, $method = "GET", $json = "")
+    {
+        $url = $this->getApiUrl() . $url;
+        $ch = curl_init();
+
+        $json_array['environment'] = $this->getEnvironment();
+        $json_array['siteurl'] = Mage::getBaseUrl();
+        $json_array['username'] = Mage::getStoreConfig('ame/general/api_user', $storeid);
+        $json_array['password'] = Mage::getStoreConfig('ame/general/api_password', $storeid);
+
+        $json_array['callback'] = $json;
+        $json_array['hash'] = "E2F49DA5F963DAE26F07E778FB4B9301B051AEEA6E8E08D788163023876BC14E";
+        $json = json_encode($json_array, JSON_PRETTY_PRINT);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+        $re = curl_exec($ch);
+        curl_close($ch);
+        return $re;
+    }
+
     public function gumRequest($action,$result,$input=""){
         $ch = curl_init();
         $environment = $this->getEnvironment();

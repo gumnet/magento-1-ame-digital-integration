@@ -42,7 +42,7 @@ class Ame_Amepayment_IndexController extends Mage_Core_Controller_Front_Action
         $helperDbame->insertCallback($json);
         if(!$this->isJson($json)){
             Mage::log("ERROR","AME Callback is not json");
-            $helperMailerame->mailSender("gustavo@gumnet.com.br","AME Callback is not json",$json);
+            $helperMailerame->mailSender("gustavo@gum.net.br","AME Callback is not json",$json);
             return;
         }
         $input = json_decode($json,true);
@@ -50,7 +50,7 @@ class Ame_Amepayment_IndexController extends Mage_Core_Controller_Front_Action
         // verify if id exists
         if(!array_key_exists('id',$input)){
             Mage::log("ERROR","AME Callback AME ID not found in JSON");
-            $helperMailerame->mailSender("gustavo@gumnet.com.br","AME Callback AME ID not found",$json);
+            $helperMailerame->mailSender("gustavo@gum.net.br","AME Callback AME ID not found",$json);
             return;
         }
         $ame_order_id = $input['attributes']['orderId'];
@@ -58,7 +58,7 @@ class Ame_Amepayment_IndexController extends Mage_Core_Controller_Front_Action
         $incrId = $helperDbame->getOrderIncrementId($ame_order_id);
         if(!$incrId){
             Mage::log("ERROR","AME Callback Increment ID not found in the database");
-            $helperMailerame->mailSender("gustavo@gumnet.com.br","AME Callback Increment ID not found",$json);
+            $helperMailerame->mailSender("gustavo@gum.net.br","AME Callback Increment ID not found",$json);
             return;
         }
 
@@ -67,23 +67,18 @@ class Ame_Amepayment_IndexController extends Mage_Core_Controller_Front_Action
 
         Mage::log("AME Environment ".$environment);
 
-        if($input['status']=="AUTHORIZED" && $environment != '1'){
+        if($input['status']=="AUTHORIZED"){
             Mage::log("INFO","AME Callback recording transaction for ".$ame_order_id);
             $helperDbame->insertTransaction($input);
-            Mage::log("INFO","AME Callback invoicing Magento order ".$incrId);
-            $this->invoiceOrder($order);
-            $helperMailerame->sendDebug("Pagamento AME recebido pedido ".$order->getIncrementId(),"AME ID: ".$ame_order_id);
-            Mage::log("INFO", "AME Callback capturing...");
-            $capture = $helperApi->captureOrder($ame_order_id);
-            $ame_transaction_id = $helperDbame->getTransactionIdByOrderId($ame_order_id);
-            $amount = $helperDbame->getTransactionAmount($ame_transaction_id);
-            $helperGumapi->captureTransaction($ame_transaction_id,$ame_order_id,$amount);
-        }
-        elseif($input['status']=="AUTHORIZED" && $environment == '1') {
-            Mage::log("INFO","AME Callback recording transaction for ".$ame_order_id);
-            $helperDbame->insertTransaction($input);
-            $order->addStatusHistoryComment('AME payment authorized');
-            $order->save();
+            $helperGumapi->queueTransaction($json);
+            Mage::log("INFO","AME Callback Queue transaction");
+//            $this->invoiceOrder($order);
+//            $helperMailerame->sendDebug("Pagamento AME recebido pedido ".$order->getIncrementId(),"AME ID: ".$ame_order_id);
+//            Mage::log("INFO", "AME Callback capturing...");
+//            $capture = $helperApi->captureOrder($ame_order_id);
+//            $ame_transaction_id = $helperDbame->getTransactionIdByOrderId($ame_order_id);
+//            $amount = $helperDbame->getTransactionAmount($ame_transaction_id);
+//            $helperGumapi->captureTransaction($ame_transaction_id,$ame_order_id,$amount);
         }
         Mage::log("INFO","AME Callback ended.");
         die();
@@ -112,5 +107,32 @@ class Ame_Amepayment_IndexController extends Mage_Core_Controller_Front_Action
     public function isJson($string) {
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
+    }
+    public function captureAction()
+    {
+        $helperDbame = Mage::helper('amepayment/Dbame');
+        $helperMailerame = Mage::helper('amepayment/Mailerame');
+        $helperApi = Mage::helper('amepayment/Api');
+        $helperGumapi = Mage::helper('amepayment/Gumapi');
+
+        $request_transaction_id = $this->getRequest()->getParam('transactionid');
+        $request_ame_order_id = $this->getRequest()->getParam('orderid');
+        if(!$transaction_id = $helperDbame->getTransactionIdByOrderId($request_ame_order_id)){
+            die("ERROR transaction not found");
+        }
+        if($transaction_id != $request_transaction_id){
+            die("ERROR wrong order id");
+        }
+        $incrId = $helperDbame->getOrderIncrementId($request_ame_order_id);
+        $order = Mage::getModel('sales/order')->loadByIncrementId($incrId);
+
+        $this->invoiceOrder($order);
+        $amount = $helperDbame->getTransactionAmount($request_transaction_id);
+        $helperGumapi->captureTransaction($request_transaction_id,$request_ame_order_id,$amount);
+//        $helperMailerame->sendDebug("Pagamento AME recebido pedido ".$order->getIncrementId(),"AME ID: ".$ame_order_id);
+        Mage::log("INFO", "AME Callback capturing...");
+//        $capture = $helperApi->captureOrder($ame_order_id);
+//        $ame_transaction_id = $helperDbame->getTransactionIdByOrderId($ame_order_id);
+//        $amount = $helperDbame->getTransactionAmount($ame_transaction_id);
     }
 }
