@@ -1,5 +1,6 @@
 <?php
 $_product = $this->getData('product');
+if($this->getCashbackPercent()){
 ?>
 
 <div class="products-list-ame-info">
@@ -12,3 +13,6 @@ $_product = $this->getData('product');
         (<?php echo $this->getCashbackPercent(); ?>% de volta)
     </span>
 </div>
+<?php
+}
+?>

@@ -38,6 +38,59 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
             return "https://ame19gwci.gum.net.br:63333/api";
         }
     }
+    public function getCashBackPercent(){
+        $dbame = Mage::helper('amepayment/Dbame');
+        $dbame->getCashbackUpdatedAt();
+        if(time()<$cashback_updated_at + 3600){
+            return $dbame->getCashbackPercent();
+        }
+        else{
+            return $this->generateCashbackFromOrder();
+        }
+    }
+    public function generateCashbackFromOrder(){
+        $url = $this->getApiUrl() . "/orders";
+        $pedido = rand(1000,1000000);
+        $json_array['title'] = "Pedido " . $pedido;
+        $json_array['description'] = "Pedido " . $pedido;
+        $json_array['amount'] = 10000;
+        $json_array['currency'] = "BRL";
+//        $json_array['attributes']['cashbackamountvalue'] = $cashbackAmountValue;
+        $json_array['attributes']['transactionChangedCallbackUrl'] = $this->getCallbackUrl();
+        $json_array['attributes']['items'] = [];
+
+        $array_items['description'] = "Produto - SKU " . "38271686";
+        $array_items['quantity'] = 1;
+        $array_items['amount'] = 9800;
+        array_push($json_array['attributes']['items'], $array_items);
+        $json_array['attributes']['customPayload']['ShippingValue'] = 200;
+        $json_array['attributes']['customPayload']['shippingAddress']['country'] = "BRA";
+        $json_array['attributes']['customPayload']['shippingAddress']['number'] = "234";
+        $json_array['attributes']['customPayload']['shippingAddress']['city'] = "Niteroi";
+        $json_array['attributes']['customPayload']['shippingAddress']['street'] = "Rua Presidente Backer";
+        $json_array['attributes']['customPayload']['shippingAddress']['postalCode'] = "24220-041";
+        $json_array['attributes']['customPayload']['shippingAddress']['neighborhood'] = "Icarai";
+        $json_array['attributes']['customPayload']['shippingAddress']['state'] = "RJ";
+        $json_array['attributes']['customPayload']['billingAddress'] = $json_array['attributes']['customPayload']['shippingAddress'];
+        $json_array['attributes']['customPayload']['isFrom'] = "MAGENTO";
+        $json_array['attributes']['paymentOnce'] = true;
+        $json_array['attributes']['riskHubProvider'] = "SYNC";
+        $json_array['attributes']['origin'] = "ECOMMERCE";
+        $json = json_encode($json_array);
+        $result = $this->ameRequest($url, "POST", $json);
+        $result_array = json_decode($result, true);
+        if ($this->hasError($result, $url, $json)) return false;
+        if(array_key_exists('cashbackAmountValue',$result_array['attributes'])){
+            $cashbackAmountValue = $result_array['attributes']['cashbackAmountValue'];
+        }
+        else{
+            $cashbackAmountValue = 0;
+        }
+        $cashback_percent = $cashbackAmountValue/100;
+        $dbame = Mage::helper('amepayment/Dbame');
+        $dbame->setCashbackPercent($cashback_percent);
+        return $cashback_percent;
+    }
 
     public function refundOrder($ame_id, $amount)
     {
