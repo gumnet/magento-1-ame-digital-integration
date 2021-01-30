@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Gustavo Ulyssea - gustavo.ulyssea@gmail.com
- * @copyright Copyright (c) 2020 GumNet (https://gum.net.br)
+ * @copyright Copyright (c) 2020-2021 GumNet (https://gum.net.br)
  * @package GumNet AME Magento 1.9
  * All rights reserved.
  *
@@ -65,7 +65,7 @@ class Ame_Amepayment_Adminhtml_OrderController extends Mage_Adminhtml_Controller
             Mage::getSingleton('adminhtml/session')->addError('Não foi possível capturar seu pedido, tente mais tarde.');
         }else{
 	    $this->invoiceOrder($order);
-	    $ame_order_id = $helperDbame->getAmeIdByIncrementId($order->getIncrementId());	
+	    $ame_order_id = $helperDbame->getAmeIdByIncrementId($order->getIncrementId());
             Mage::log("INFO", "AME Admin capturing...");
             $ame_transaction_id = $helperDbame->getTransactionIdByOrderId($ame_order_id);
             $amount = $helperDbame->getTransactionAmount($ame_transaction_id);
@@ -105,5 +105,5 @@ class Ame_Amepayment_Adminhtml_OrderController extends Mage_Adminhtml_Controller
             $order->setState('processing')->setStatus('processing')->save();
         }
     }
-	
+
 }
