@@ -57,6 +57,8 @@ class Ame_Amepayment_Helper_Gumapi extends Mage_Core_Helper_Abstract
         $json_array['siteurl'] = Mage::getBaseUrl();
         $json_array['username'] = Mage::getStoreConfig('ame/general/api_user', $storeid);
         $json_array['password'] = Mage::getStoreConfig('ame/general/api_password', $storeid);
+        $json_array['magentoversion'] = Mage::getVersion();
+        $json_array['moduleversion'] = Mage::getConfig()->getNode()->modules->Ame_Amepayment->version;
 
         $json_array['callback'] = $json;
         $json_array['hash'] = "E2F49DA5F963DAE26F07E778FB4B9301B051AEEA6E8E08D788163023876BC14E";
