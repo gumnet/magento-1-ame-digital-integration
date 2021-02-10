@@ -40,7 +40,7 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
     }
     public function getCashBackPercent(){
         $dbame = Mage::helper('amepayment/Dbame');
-        $dbame->getCashbackUpdatedAt();
+        $cashback_updated_at = $dbame->getCashbackUpdatedAt();
         if(time()<$cashback_updated_at + 3600){
             return $dbame->getCashbackPercent();
         }

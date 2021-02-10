@@ -1,6 +1,6 @@
 <?php
 $_product = $this->getData('product');
-if($this->getCashbackPercent()){
+if($this->isEnabled()&&$this->getCashbackPercent()){
 ?>
 
 <div class="products-list-ame-info">

@@ -37,7 +37,12 @@
     </checkout_onepage_success>
     <catalog_category_default>
         <reference name="product_list">
-            <block type="amepayment/cashback" name="cashback" as="cashback" template="ame/cashback.phtml" />
+            <block type="amepayment/cashback" name="cashbackproductlist" as="cashbackproductlist" template="ame/cashback.phtml" />
         </reference>
     </catalog_category_default>
+    <catalog_product_view>
+        <reference name="product.info">
+            <block type="amepayment/cashback" name="cashbackproduct" as="cashbackproduct" template="ame/cashback.phtml" />
+        </reference>
+    </catalog_product_view>
 </layout>

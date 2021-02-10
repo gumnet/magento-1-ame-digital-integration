@@ -29,11 +29,18 @@
 
 class Ame_Amepayment_Block_Cashback extends Mage_Core_Block_Template
 {
-    public function getCashbackValue($product){
+    public function getCashbackValue($product)
+    {
         $value = $product->getFinalPrice() * $this->getCashbackPercent() * 0.01;
         return $value;
     }
-    public function getCashbackPercent(){
+    public function getCashbackPercent()
+    {
         return $percent = Mage::helper('amepayment/api')->getCashBackPercent();
+    }
+    public function isEnabled()
+    {
+        $storeid = Mage::app()->getStore()->getStoreId();
+        return Mage::getStoreConfig('payment/amepayment/active', $storeid);
     }
 }
