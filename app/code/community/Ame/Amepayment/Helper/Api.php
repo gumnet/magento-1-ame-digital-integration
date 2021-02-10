@@ -174,7 +174,9 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
             $array_items['amount'] = intval(($item->getRowTotal() - $item->getDiscountAmount()) * 100);
             $products_amount = $amount + $array_items['amount'];
             $total_discount = $total_discount + abs($item->getDiscountAmount());
-            array_push($json_array['attributes']['items'], $array_items);
+            if($item->getTypeID()!='configurable') {
+                array_push($json_array['attributes']['items'], $array_items);
+            }
         }
 //        if($total_discount){
 //            $amount = intval($products_amount + $shippingAmount * 100);
