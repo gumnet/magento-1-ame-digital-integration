@@ -32,7 +32,7 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
     public function getApiUrl(){
         $storeid = Mage::app()->getStore()->getStoreId();
         if (Mage::getStoreConfig('ame/general/environment', $storeid) == 1) {
-            return "https://ame19gwci.gum.net.br:63333/api";
+            return "https://api.hml.amedigital.com/api";
         }
         if (Mage::getStoreConfig('ame/general/environment', $storeid) == 2) {
             return "https://ame19gwci.gum.net.br:63333/api";
@@ -164,7 +164,7 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
         $json_array['attributes']['transactionChangedCallbackUrl'] = $this->getCallbackUrl();
         $json_array['attributes']['items'] = [];
 
-        $items = $order->getAllItems();
+        $items = $order->getAllVisibleItems();
         $amount = 0;
         $total_discount = 0;
         foreach ($items as $item) {
@@ -174,9 +174,7 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
             $array_items['amount'] = intval(($item->getRowTotal() - $item->getDiscountAmount()) * 100);
             $products_amount = $amount + $array_items['amount'];
             $total_discount = $total_discount + abs($item->getDiscountAmount());
-            if($item->getTypeID()!='configurable') {
-                array_push($json_array['attributes']['items'], $array_items);
-            }
+            array_push($json_array['attributes']['items'], $array_items);
         }
 //        if($total_discount){
 //            $amount = intval($products_amount + $shippingAmount * 100);
