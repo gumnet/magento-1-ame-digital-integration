@@ -138,7 +138,7 @@
     <default>
         <payment>
             <ame>
-                <active>1</active>
+                <active>0</active>
                 <model>amepayment/amepayment</model>
                 <order_status>pending</order_status>
                 <title>AME</title>

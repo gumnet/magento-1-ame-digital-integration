@@ -152,7 +152,7 @@
         </ame>
         <payment>
             <groups>
-                <amepayment translate="label" module="amepayment">
+                <ame translate="label" module="amepayment">
                     <label>AME</label>
                     <sort_order>900</sort_order>
                     <show_in_default>1</show_in_default>
@@ -166,8 +166,16 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <sort_order>2</sort_order>
+                            <sort_order>1</sort_order>
                         </active>
+                        <title translate="label">
+                            <label>Titulo</label>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>2</sort_order>
+                        </title>
                         <order_status translate="label">
                             <label>New order status</label>
                             <frontend_type>select</frontend_type>
@@ -196,7 +204,7 @@
                             <sort_order>5</sort_order>
                         </specificcountry>
                     </fields>
-                </amepayment>
+                </ame>
             </groups>
         </payment>
     </sections>
