@@ -102,31 +102,6 @@ if($this->getPaymentMethod()=="ame") {
                 window.location = "<?php echo $this->getDeepLink();?>";
             }
         </script>
-        <script>
-            var updatePaymentLoop = setInterval(updatePaymentConfirmation,3000);
-
-            function paymentConfirmed(){
-                var msgPagamentoConfirmado = "<br><br><br>Recebemos seu pagamento.<br><br>Muito obrigado pela compra!<br><br>Enviaremos atualizações para seu email cadastrado.<br><br><br>";
-                jQuery('#success_ame_info').remove();
-                jQuery('#success_ame_qrcode').remove();
-                jQuery('#success_ame_facil').remove();
-                jQuery('#success_ame_cashback_txt').html(msgPagamentoConfirmado);
-            }
-            function updatePaymentConfirmation()
-            {
-                jQuery.ajax({
-                    url: "<?php echo Mage::getBaseUrl();?>m1amecallbackendpoint/PaymentConfirmation?id=<?php echo $this->getOrder()->getEntityId();?>",
-                    context: document.body
-                }).done(function (resposta) {
-                    console.log(resposta);
-                    if (resposta === "1") {
-                        paymentConfirmed();
-                        clearInterval(updatePaymentLoop);
-                    }
-                });
-            }
-        </script>
-
     </div>
     <?php
 }
