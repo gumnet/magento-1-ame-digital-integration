@@ -57,7 +57,11 @@ class Ame_Amepayment_Adminhtml_OrderController extends Mage_Adminhtml_Controller
     public function CaptureAction(){
         $order_id = $this->getRequest()->getParam('order_id');
         $order = Mage::getModel('sales/order')->load($order_id);
+        $storeid = Mage::app()->getStore()->getStoreId();
         $helperApi = Mage::helper('amepayment/Api');
+        if (Mage::getStoreConfig('ame/general/environment', $storeid) == 3) {
+            $helperApi = Mage::helper('amepayment/SensediaApi');
+        }
         $helperDbame = Mage::helper('amepayment/Dbame');
 	    $helperGumapi = Mage::helper('amepayment/Gumapi');
         $capture = $helperApi->captureOrder($helperDbame->getAmeIdByIncrementId($order->getIncrementId()));

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Gustavo Ulyssea - gustavo.ulyssea@gmail.com
- * @copyright Copyright (c) 2020-2021 GumNet (https://gum.net.br)
+ * @copyright Copyright (c) 2020 GumNet (https://gum.net.br)
  * @package GumNet AME Magento 1.9
  * All rights reserved.
  *
@@ -27,25 +27,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-class Ame_Amepayment_Block_Cashback extends Mage_Core_Block_Template
+class Ame_Amepayment_PaymentConfirmationController extends Mage_Core_Controller_Front_Action
 {
-    public function getCashbackValue($product)
+    public function indexAction()
     {
-        $value = $product->getFinalPrice() * $this->getCashbackPercent() * 0.01;
-        return $value;
-    }
-    public function getCashbackPercent()
-    {
-        $storeid = Mage::app()->getStore()->getStoreId();
-        $helperApi = Mage::helper('amepayment/Api');
-        if (Mage::getStoreConfig('ame/general/environment', $storeid) == 3) {
-            $helperApi = Mage::helper('amepayment/SensediaApi');
+        $id = $this->getRequest()->getParam('id');
+        if (!$id) die();
+        $order = Mage::getModel('sales/order')->load($id);
+        if ($order->hasInvoices()) {
+            echo 1;
+        } else {
+            echo 0;
         }
-        return $percent = $helperApi->getCashBackPercent();
-    }
-    public function isEnabled()
-    {
-        $storeid = Mage::app()->getStore()->getStoreId();
-        return Mage::getStoreConfig('payment/amepayment/active', $storeid);
+        die();
     }
 }

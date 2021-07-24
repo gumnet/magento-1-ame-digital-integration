@@ -38,6 +38,11 @@ class Ame_Amepayment_Model_Cron
         foreach ($orderCollection as $order){
             $order1 = Mage::getModel('sales/order')->load($order->getId());
             $helperApi = Mage::helper('amepayment/Api');
+            $storeid = Mage::app()->getStore()->getStoreId();
+            if (Mage::getStoreConfig('ame/general/environment', $storeid) == 3) {
+                $helperApi = Mage::helper('amepayment/SensediaApi');
+            }
+
             $helperDbame = Mage::helper('amepayment/Dbame');
             $helperGumapi = Mage::helper('amepayment/Gumapi');
             $capture = $helperApi->captureOrder($helperDbame->getAmeIdByIncrementId($order->getIncrementId()));

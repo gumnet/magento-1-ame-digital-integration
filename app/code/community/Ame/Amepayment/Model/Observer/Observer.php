@@ -40,7 +40,11 @@ class Ame_Amepayment_Model_Observer_Observer
         if($method=="ame") {
             //$order->setState('pending_payment')->setStatus('pending_payment');
             $order->save();
+            $storeid = Mage::app()->getStore()->getStoreId();
             $helper = Mage::helper('amepayment/Api');
+            if (Mage::getStoreConfig('ame/general/environment', $storeid) == 3) {
+                $helper = Mage::helper('amepayment/SensediaApi');
+            }
             $helper->createOrder($order);
         }
         return $this;
@@ -54,7 +58,12 @@ class Ame_Amepayment_Model_Observer_Observer
         $method = $payment->getMethod();
         if($method=="ame") {
             $valor = $refund->getGrandTotal();
+            $storeid = Mage::app()->getStore()->getStoreId();
             $helperApi = Mage::helper('amepayment/Api');
+            if (Mage::getStoreConfig('ame/general/environment', $storeid) == 3) {
+                $helperApi = Mage::helper('amepayment/SensediaApi');
+            }
+
             $helperDbame = Mage::helper('amepayment/Dbame');
             $refund = $helperApi->refundOrder($helperDbame->getAmeIdByIncrementId($order->getIncrementId()), $valor);
             if ($refund) {
