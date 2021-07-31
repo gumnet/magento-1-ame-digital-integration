@@ -118,6 +118,12 @@ class Ame_Amepayment_Helper_Dbame extends Mage_Core_Helper_Abstract
             return false;
         }
     }
+    public function cancelOrder($incrementId)
+    {
+        $sql = "UPDATE ame_order SET status = 'canceled' WHERE increment_id = '".$incrementId."'";
+        $resourceDb = $this->getWriteDB();
+        $resourceDb->query($sql);
+    }
 
     public function insertOrder($order,$result_array){
         if(array_key_exists('cashbackAmountValue',$result_array['attributes'])){
@@ -226,6 +232,12 @@ class Ame_Amepayment_Helper_Dbame extends Mage_Core_Helper_Abstract
     public function getAmeIdByIncrementId($incrementId)
     {
         $sql = "SELECT ame_id FROM ame_order WHERE increment_id = '".$incrementId."'";
+        $resourceDb = $this->getReadDB();
+        return $resourceDb->fetchOne($sql);
+    }
+    public function getOrderStatus($incrementId)
+    {
+        $sql = "SELECT status FROM ame_order WHERE increment_id = '".$incrementId."'";
         $resourceDb = $this->getReadDB();
         return $resourceDb->fetchOne($sql);
     }

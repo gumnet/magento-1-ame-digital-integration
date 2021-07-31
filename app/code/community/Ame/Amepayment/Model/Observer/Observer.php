@@ -49,6 +49,27 @@ class Ame_Amepayment_Model_Observer_Observer
         }
         return $this;
     }
+    public function cancelOrder($observer)
+    {
+        $order = $observer->getOrder();
+        if (!$order->isCanceled() || $order->getOrigData('state')=='canceled') {
+            return $this;
+        }
+        $helperDbame = Mage::helper('amepayment/Dbame');
+        if ($helperDbame->getOrderStatus($order->getIncrementId())=='canceled') {
+            return $this;
+        }
+        $storeid = Mage::app()->getStore()->getStoreId();
+        if (Mage::getStoreConfig('ame/general/environment', $storeid) != 3) {
+            return $this;
+        }
+        $helper = Mage::helper('amepayment/SensediaApi');
+        $ameId = $helperDbame->getAmeIdByIncrementId($order->getIncrementId());
+        if (!$helper->cancelOrder($ameId)) {
+            return $this;
+        }
+        $helperDbame->cancelOrder($order->getIncrementId());
+    }
 
     public function refundOrder($observer)
     {

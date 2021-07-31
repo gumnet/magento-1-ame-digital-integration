@@ -110,6 +110,13 @@ class Ame_Amepayment_Helper_SensediaApi extends Mage_Core_Helper_Abstract
     }
     public function cancelOrder($ame_id)
     {
+        $url = $this->getApiUrl() . "/ordens/" . $ame_id;// . "/cancel";
+        $result = $this->ameRequest($url, "DELETE", "");
+        if ($this->hasError($result, $url, "")) return false;
+        return true;
+    }
+    public function cancelTransaction($ame_id)
+    {
         $dbame = Mage::helper('amepayment/Dbame');
         $transaction_id = $dbame->getTransactionIdByOrderId($ame_id);
         if (!$transaction_id) {
@@ -256,8 +263,8 @@ class Ame_Amepayment_Helper_SensediaApi extends Mage_Core_Helper_Abstract
     public function ameRequest($url, $method = "GET", $json = "")
     {
         Mage::log("ameRequest starting...");
-        $_token = $this->getToken();
-        if (!$_token) return false;
+//        $_token = $this->getToken();
+//        if (!$_token) return false;
         $method = strtoupper($method);
         Mage::log("ameRequest URL:" . $url);
         Mage::log("ameRequest METHOD:" . $method);

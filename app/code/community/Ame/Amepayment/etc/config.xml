@@ -122,6 +122,15 @@
                     </ame_amepayment_model_refund_observer>
                 </observers>
             </sales_order_creditmemo_refund>
+            <sales_order_save_after>
+                <observers>
+                    <ame_amepayment_model_cancel_observer>
+                        <type>model</type>
+                        <class>amepayment/Observer_Observer</class>
+                        <method>cancelOrder</method>
+                    </ame_amepayment_model_cancel_observer>
+                </observers>
+            </sales_order_save_after>
         </events>
     </adminhtml>
     <admin>
