@@ -31,7 +31,7 @@ class Ame_Amepayment_Helper_SensediaApi extends Mage_Core_Helper_Abstract
 {
     public function getApiUrl()
     {
-        return "http://api-amedigital.sensedia.com/transacoes/v1";
+        return "https://ame19gwci.gum.net.br:63334/transacoes/v1";
     }
     public function getCashBackPercent()
     {
