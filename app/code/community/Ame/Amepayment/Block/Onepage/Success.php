@@ -31,7 +31,7 @@ class Ame_Amepayment_Block_Onepage_Success extends Mage_Checkout_Block_Onepage_S
 {
     public function getCashbackValue(){
         $increment_id = $this->getOrder()->getIncrementId();
-        $sql = "SELECT cashback_amount FROM ame_order WHERE increment_id = ".$increment_id;
+        $sql = "SELECT cashback_amount FROM ame_order WHERE increment_id = '".$increment_id."'";
         $resource = Mage::getSingleton('core/resource');
         $readConnection = $resource->getConnection('core_read');
         $value = $readConnection->fetchOne($sql);
@@ -59,7 +59,7 @@ class Ame_Amepayment_Block_Onepage_Success extends Mage_Checkout_Block_Onepage_S
     public function getDeepLink(){
 
         $increment_id = $this->getOrder()->getIncrementId();
-        $sql = "SELECT deep_link FROM ame_order WHERE increment_id = ".$increment_id;
+        $sql = "SELECT deep_link FROM ame_order WHERE increment_id = '".$increment_id."'";
         $resource = Mage::getSingleton('core/resource');
         $readConnection = $resource->getConnection('core_read');
         $qr = $readConnection->fetchOne($sql);
@@ -68,7 +68,7 @@ class Ame_Amepayment_Block_Onepage_Success extends Mage_Checkout_Block_Onepage_S
 
     public function getQrCodeLink(){
         $increment_id = $this->getOrder()->getIncrementId();
-        $sql = "SELECT qr_code_link FROM ame_order WHERE increment_id = ".$increment_id;
+        $sql = "SELECT qr_code_link FROM ame_order WHERE increment_id = '".$increment_id."'";
         $resource = Mage::getSingleton('core/resource');
         $readConnection = $resource->getConnection('core_read');
         $qr = $readConnection->fetchOne($sql);

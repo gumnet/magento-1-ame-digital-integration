@@ -108,7 +108,7 @@ class Ame_Amepayment_Helper_Dbame extends Mage_Core_Helper_Abstract
     public function transactionIdExists($magento_increment_id){
         $sql = "select at.ame_transaction_id from ame_transaction as at 
                 LEFT JOIN ame_order as ao ON at.ame_order_id = ao.ame_id
-                where ao.increment_id = '{$magento_increment_id};'";
+                where ao.increment_id = '".$magento_increment_id."'";
         $resourceDb = $this->getReadDB();
         $result = $resourceDb->fetchOne($sql);
         if($result){
@@ -134,7 +134,7 @@ class Ame_Amepayment_Helper_Dbame extends Mage_Core_Helper_Abstract
         }
         $sql = "INSERT INTO ame_order (increment_id,ame_id,amount,cashback_amount,
                        qr_code_link,deep_link)
-                VALUES (" . $order->getIncrementId() . ",'" . $result_array['id'] . "',
+                VALUES ('" . $order->getIncrementId() . "','" . $result_array['id'] . "',
                         " . $result_array['amount'] . ",
                         ".$cashbackAmountValue.",
                         '" . $result_array['qrCodeLink'] . "',
