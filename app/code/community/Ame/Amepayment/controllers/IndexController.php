@@ -35,7 +35,7 @@ class Ame_Amepayment_IndexController extends Mage_Core_Controller_Front_Action
         $helperMailerame = Mage::helper('amepayment/Mailerame');
         $helperApi = Mage::helper('amepayment/Api');
         $helperGumapi = Mage::helper('amepayment/Gumapi');
-        $storeid = Magxe::app()->getStore()->getStoreId();
+        $storeid = Mage::app()->getStore()->getStoreId();
         $environment = Mage::getStoreConfig('ame/general/environment', $storeid);
         Mage::log("INFO","AME Callback starting...");
         $json = $this->getRequest()->getRawBody();
