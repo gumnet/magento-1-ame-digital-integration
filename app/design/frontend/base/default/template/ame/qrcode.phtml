@@ -78,8 +78,9 @@ if($this->getPaymentMethod()=="ame") {
                <br><br>
                 Valor da compra:
             </div>
-            <div id="success_ame_value">R$<?php echo number_format($this->getPrice()-abs($total_discount),
-                    2,",","."); ?></div><br>
+            <div id="success_ame_value">R$<?php
+                echo number_format($this->getPrice(), 2,",",".");
+                ?></div><br>
             <div id="success_ame_cashback_txt">Receba de volta <div id="success_ame_cashback_value">
                     <?php echo number_format($this->getCashbackValue(),2,",","."); ?></div> em até 30 dias.</div><br>
             <div id="success_ame_facil">Pagar com a AME é fácil e rápido!</div>

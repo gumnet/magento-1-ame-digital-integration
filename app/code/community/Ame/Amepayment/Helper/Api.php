@@ -168,10 +168,14 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
         $amount = 0;
         $total_discount = 0;
         foreach ($items as $item) {
-            if (isset($array_items)) unset($array_items);
+            if (isset($array_items)) {
+                unset($array_items);
+            }
             $array_items['description'] = $item->getName() . " - SKU " . $item->getSku();
-            $array_items['quantity'] = intval($item->getQtyOrdered());
-            $array_items['amount'] = intval(($item->getRowTotal() - $item->getDiscountAmount()) * 100);
+            $array_items['quantity'] =
+                intval($item->getQtyOrdered());
+            $array_items['amount'] =
+                intval(($item->getRowTotal() - $item->getDiscountAmount()) * 100);
             $products_amount = $amount + $array_items['amount'];
             $total_discount = $total_discount + abs($item->getDiscountAmount());
             array_push($json_array['attributes']['items'], $array_items);
@@ -183,16 +187,20 @@ class Ame_Amepayment_Helper_Api extends Mage_Core_Helper_Abstract
 //            $json_array['attributes']['cashbackamountvalue'] = $cashbackAmountValue;
 //        }
 
-        $json_array['attributes']['customPayload']['ShippingValue'] = intval($order->getShippingAmount() * 100);
+        $json_array['attributes']['customPayload']['ShippingValue'] =
+            intval($order->getShippingAmount() * 100);
         $json_array['attributes']['customPayload']['shippingAddress']['country'] = "BRA";
 
         $number_line = Mage::getStoreConfig('ame/address/number', $storeid);
-        $json_array['attributes']['customPayload']['shippingAddress']['number'] = $order->getShippingAddress()->getStreet()[$number_line];
+        $json_array['attributes']['customPayload']['shippingAddress']['number'] =
+            $order->getShippingAddress()->getStreet()[$number_line];
 
-        $json_array['attributes']['customPayload']['shippingAddress']['city'] = $order->getShippingAddress()->getCity();
+        $json_array['attributes']['customPayload']['shippingAddress']['city'] =
+            $order->getShippingAddress()->getCity();
 
         $street_line = $number_line = Mage::getStoreConfig('ame/address/street', $storeid);
-        $json_array['attributes']['customPayload']['shippingAddress']['street'] = $order->getShippingAddress()->getStreet()[$street_line];
+        $json_array['attributes']['customPayload']['shippingAddress']['street'] =
+            $order->getShippingAddress()->getStreet()[$street_line];
 
         $json_array['attributes']['customPayload']['shippingAddress']['postalCode'] = $order->getShippingAddress()->getPostcode();
 
